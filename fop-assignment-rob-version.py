@@ -1,5 +1,5 @@
 ## FOP Assignment 5.04 ##
-## by Rob Fraweley 2nd ##
+## by Rob Frawley 2nd ##
 ## 8/3/2025 ##
 
 import random
