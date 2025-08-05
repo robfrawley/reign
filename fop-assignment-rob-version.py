@@ -5,34 +5,57 @@
 import random
 
 class Fighter:
-    def __init__(self, name = "", hp = 250, pwr = 100, defense = 25, speed = 100):
+    def __init__(self, name = "", health = 250, damage = 100, defense = 25, speed = 100, heal_ability = 50, heal_chance = 0.75):
         self.name = name
-        self.hp = hp
-        self.pwr = pwr
+        self.health_max = health
+        self.health = health
+        self.damage = damage
         self.defense = defense
         self.speed = speed
+        self.heal_ability = heal_ability
+        self.heal_chance = heal_chance
 
     def attack(self, opponent):
         if not self.is_alive():
             return
 
-        damage = random.randint(int(self.pwr / 2), self.pwr) - opponent.defense
+        damage = Fighter.calculate_stat_from_range(self.damage) - opponent.defense
 
         if damage < 0:
             damage = 0
 
-        opponent.hp -= damage
+        opponent.health -= damage
 
         print(f"!! {self.name} attacks {opponent.name} for {damage} damage!")
 
+        opponent.heal()
+
+    def heal(self):
+        if random.random() > self.heal_chance:
+            print(f"-- {self.name} could not heal.")
+            return
+
+        heal_amount = Fighter.calculate_stat_from_range(self.heal_ability)
+
+        self.health += heal_amount
+
+        if self.health > self.health_max:
+            self.health = self.health_max
+
+        print(f"++ {self.name} heals for {heal_amount} health!")
+
     def can_outrun(self, opponent):
-        return random.randint(int(self.speed / 2), int(self.speed * 2)) > random.randint(int(opponent.speed / 2), int(opponent.speed * 2))
+        return Fighter.calculate_stat_from_range(self.speed) > Fighter.calculate_stat_from_range(opponent.speed)
 
     def is_alive(self):
-        return self.hp > 0
+        return self.health > 0
+    
+    def __str__(self):
+        return f"-- Fighter (name={self.name}, health={self.health}, damage={self.damage}, defense={self.defense}, speed={self.speed}, state={"alive" if self.is_alive() else "dead"})"
 
-    def write_stats(self):
-        print(f"-- Player Stats: [power: {self.pwr}, defense: {self.defense}, speed: {self.speed}, hp: {self.hp}, state: {'alive' if self.is_alive() else 'dead'}, name: {self.name}]")
+    @staticmethod
+    def calculate_stat_from_range(stat, low_bounds_divisor = 2, high_bounds_multiplier = 1.5):
+        return random.randint(int(stat / low_bounds_divisor), int(stat * high_bounds_multiplier))
 
 
 class Arena:
@@ -45,26 +68,22 @@ class Arena:
             print("## RUNNING MATCH TURN...")
 
             if self.contestant1.can_outrun(self.contestant2):
-                print(f"-- {self.contestant1.name} can outrun {self.contestant2.name} ({self.contestant1.name} attacks first).")
+                print(f"~~ {self.contestant1.name} can outrun {self.contestant2.name} ({self.contestant1.name} attacks first).")
                 self.contestant1.attack(self.contestant2)
                 self.contestant2.attack(self.contestant1)
             else:
-                print(f"-- {self.contestant2.name} can outrun {self.contestant1.name} ({self.contestant2.name} attacks first).")
+                print(f"~~ {self.contestant2.name} can outrun {self.contestant1.name} ({self.contestant2.name} attacks first).")
                 self.contestant2.attack(self.contestant1)
                 self.contestant1.attack(self.contestant2)
 
-            self.contestant1.write_stats()
-            self.contestant2.write_stats()
+            print(str(self.contestant1))
+            print(str(self.contestant2))
 
-        print(f"++ {self.contestant1.name} is {'alive' if self.contestant1.is_alive() else 'dead'}!")
-        print(f"++ {self.contestant2.name} is {'alive' if self.contestant2.is_alive() else 'dead'}!")
+        print(f"<> Winner: {self.contestant1.name if self.contestant1.is_alive() else self.contestant2.name}")
 
 
 def main():
-	fighter1 = Fighter(input("Enter the name of the 1st fighter: "))
-	fighter2 = Fighter(input("Enter the name of the 2nd fighter: "))
-
-	Fight = Arena(fighter1, fighter2)
+	Fight = Arena(Fighter(input("Enter the name of the 1st fighter: ")), Fighter(input("Enter the name of the 2nd fighter: ")))
 	Fight.run_match()
 
 
