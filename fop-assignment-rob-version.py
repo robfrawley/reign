@@ -12,7 +12,7 @@ class Fighter:
         self.defense = defense
         self.speed = speed
 	
-    def attacks(self, opponent):
+    def attack(self, opponent):
         if not self.is_alive():
             return
 
@@ -53,13 +53,13 @@ class Arena:
         while self.contestant1.is_alive() and self.contestant2.is_alive():
             if self.contestant1.can_outrun(self.contestant2):
                 print(f"{self.contestant1.name} can outrun {self.contestant2.name}.")
-                self.contestant2.attacks(self.contestant1)
-                self.contestant1.attacks(self.contestant2)
+                self.contestant2.attack(self.contestant1)
+                self.contestant1.attack(self.contestant2)
             else:
                 print(f"{self.contestant1.name} cannot outrun {self.contestant2.name}.")
                 print(f"{self.contestant2.name} attacks first!")
-                self.contestant2.attacks(self.contestant1)
-                self.contestant1.attacks(self.contestant2)
+                self.contestant2.attack(self.contestant1)
+                self.contestant1.attack(self.contestant2)
 
         print(f"{self.contestant1.name} is {'alive' if self.contestant1.is_alive() else 'dead'}!")
         print(f"{self.contestant2.name} is {'alive' if self.contestant2.is_alive() else 'dead'}!")
