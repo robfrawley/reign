@@ -52,12 +52,11 @@ class Arena:
 
         while self.contestant1.is_alive() and self.contestant2.is_alive():
             if self.contestant1.can_outrun(self.contestant2):
-                print(f"{self.contestant1.name} can outrun {self.contestant2.name}.")
-                self.contestant2.attack(self.contestant1)
+                print(f"# {self.contestant1.name} can outrun {self.contestant2.name} ({self.contestant1.name} attacks first).")
                 self.contestant1.attack(self.contestant2)
+                self.contestant2.attack(self.contestant1)
             else:
-                print(f"{self.contestant1.name} cannot outrun {self.contestant2.name}.")
-                print(f"{self.contestant2.name} attacks first!")
+                print(f"# {self.contestant2.name} can outrun {self.contestant1.name} ({self.contestant2.name} attacks first).")
                 self.contestant2.attack(self.contestant1)
                 self.contestant1.attack(self.contestant2)
 
