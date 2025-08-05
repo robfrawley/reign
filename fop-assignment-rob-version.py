@@ -11,7 +11,7 @@ class Fighter:
         self.pwr = pwr
         self.defense = defense
         self.speed = speed
-	
+
     def attack(self, opponent):
         if not self.is_alive():
             return
@@ -30,16 +30,16 @@ class Fighter:
 
     def is_alive(self):
         return self.hp > 0
-    
+
     def write_stats(self):
         print(f"-- Player Stats: [power: {self.pwr}, defense: {self.defense}, speed: {self.speed}, hp: {self.hp}, state: {'alive' if self.is_alive() else 'dead'}, name: {self.name}]")
-	
-	
+
+
 class Arena:
     def __init__(self, contestant1, contestant2):
         self.contestant1 = contestant1
         self.contestant2 = contestant2
-		
+
     def run_match(self):
         while self.contestant1.is_alive() and self.contestant2.is_alive():
             print("## RUNNING MATCH TURN...")
@@ -64,9 +64,8 @@ def main():
 	fighter1 = Fighter(input("Enter the name of the 1st fighter: "))
 	fighter2 = Fighter(input("Enter the name of the 2nd fighter: "))
 
-	
 	Fight = Arena(fighter1, fighter2)
 	Fight.run_match()
-	
-	
+
+
 main()
