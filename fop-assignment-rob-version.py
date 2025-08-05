@@ -65,8 +65,8 @@ class Arena:
 
 
 def main():
-	fighter1 = Fighter(input("Enter the name of the first fighter: "))
-	fighter2 = Fighter(input("Enter the name of the second fighter: "))
+	fighter1 = Fighter(input("Enter the name of the 1st fighter: "))
+	fighter2 = Fighter(input("Enter the name of the 2nd fighter: "))
 
 	
 	Fight = Arena(fighter1, fighter2)
