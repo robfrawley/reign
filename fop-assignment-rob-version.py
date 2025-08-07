@@ -47,7 +47,7 @@ class Fighter:
 
     def is_alive(self):
         return self.health > 0
-    
+
     def __str__(self):
         return f"-- Fighter (health={self.health}/{self.health_max}, damage={self.damage}, defense={self.defense}, speed={self.speed}, heal_amount={self.heal_amount}, heal_chance={self.heal_chance}, state={"alive" if self.is_alive() else "dead"}, name={self.name})"
 
