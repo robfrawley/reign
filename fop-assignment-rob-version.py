@@ -3,6 +3,7 @@
 ## 2025/08/04          ##
 
 import random
+import sys
 
 class Fighter:
     def __init__(self, name = "", health = 250, damage = 100, defense = 50, speed = 100, heal_amount = 50, heal_chance = 0.5):
@@ -80,8 +81,12 @@ class Arena:
         fighter2.attack(fighter1)
 
 
+def get_argv_or_input(arg_index, fighter_number):
+    return sys.argv[arg_index] if len(sys.argv) > arg_index else input(f"Enter the name of the {fighter_number} fighter: ")
+
+
 def main():
-	Fight = Arena(Fighter(input("Enter the name of the 1st fighter: ")), Fighter(input("Enter the name of the 2nd fighter: ")))
+	Fight = Arena(Fighter(get_argv_or_input(1, "1st")), Fighter(get_argv_or_input(2, "2nd")))
 	Fight.run_match()
 
 
