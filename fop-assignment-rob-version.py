@@ -86,8 +86,8 @@ def get_argv_or_input(arg_index, fighter_number):
 
 
 def main():
-	Fight = Arena(Fighter(get_argv_or_input(1, "1st")), Fighter(get_argv_or_input(2, "2nd")))
-	Fight.run_match()
+    Fight = Arena(Fighter(get_argv_or_input(1, "1st")), Fighter(get_argv_or_input(2, "2nd")))
+    Fight.run_match()
 
 
 main()
