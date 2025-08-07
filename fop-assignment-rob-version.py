@@ -18,12 +18,16 @@ class Fighter:
     def attack(self, opponent):
         if not self.is_alive():
             return
+        
+        if opponent.can_outrun(self):
+            print(f"~~ {self.name} cannot attack because {opponent.name} outran them!")
+            return
 
-        damage = max(0, Fighter.calculate_stat_from_range(self.damage) - opponent.defense)
-
+        defence = Fighter.calculate_stat_from_range(opponent.defense, 0.25, 1.25)
+        damage = max(0, Fighter.calculate_stat_from_range(self.damage) - defence)
         opponent.health -= damage
 
-        print(f"!! {self.name} attacks {opponent.name} for {damage} damage!")
+        print(f"!! {self.name} attacks {opponent.name} for {damage} damage ({opponent.name} defended with {defence})!")
 
         self.heal()
 
@@ -33,7 +37,6 @@ class Fighter:
             return
 
         heal_amount = Fighter.calculate_stat_from_range(self.heal_amount)
-
         self.health = min(self.health + heal_amount, self.health_max)
 
         print(f"++ {self.name} heals for {heal_amount} health!")
@@ -45,35 +48,36 @@ class Fighter:
         return self.health > 0
     
     def __str__(self):
-        return f"-- Fighter (name={self.name}, health={self.health}/{self.health_max}, damage={self.damage}, defense={self.defense}, speed={self.speed}, heal_amount={self.heal_amount}, heal_chance={self.heal_chance}, state={"alive" if self.is_alive() else "dead"})"
+        return f"-- Fighter (health={self.health}/{self.health_max}, damage={self.damage}, defense={self.defense}, speed={self.speed}, heal_amount={self.heal_amount}, heal_chance={self.heal_chance}, state={"alive" if self.is_alive() else "dead"}, name={self.name})"
 
     @staticmethod
-    def calculate_stat_from_range(stat, low_bounds_divisor = 2, high_bounds_multiplier = 1.5):
-        return random.randint(int(stat / low_bounds_divisor), int(stat * high_bounds_multiplier))
+    def calculate_stat_from_range(stat, lower_bounds_multiplier = 0.5, upper_bounds_multiplier = 1.5):
+        return random.randint(int(stat * lower_bounds_multiplier), int(stat * upper_bounds_multiplier))
 
 
 class Arena:
-    def __init__(self, contestant1, contestant2):
-        self.contestant1 = contestant1
-        self.contestant2 = contestant2
+    def __init__(self, fighter1, fighter2):
+        self.fighter1 = fighter1
+        self.fighter2 = fighter2
 
     def run_match(self):
-        while self.contestant1.is_alive() and self.contestant2.is_alive():
+        while self.fighter1.is_alive() and self.fighter2.is_alive():
             print("## RUNNING MATCH TURN...")
 
-            if self.contestant1.can_outrun(self.contestant2):
-                print(f"~~ {self.contestant1.name} can outrun {self.contestant2.name} ({self.contestant1.name} attacks first).")
-                self.contestant1.attack(self.contestant2)
-                self.contestant2.attack(self.contestant1)
+            if random.random() < 0.5:
+                Arena.run_match_attacks(self.fighter1, self.fighter2)
             else:
-                print(f"~~ {self.contestant2.name} can outrun {self.contestant1.name} ({self.contestant2.name} attacks first).")
-                self.contestant2.attack(self.contestant1)
-                self.contestant1.attack(self.contestant2)
+                Arena.run_match_attacks(self.fighter2, self.fighter1)
 
-            print(str(self.contestant1))
-            print(str(self.contestant2))
+            print(str(self.fighter1))
+            print(str(self.fighter2))
 
-        print(f"<> Winner: {self.contestant1.name if self.contestant1.is_alive() else self.contestant2.name}")
+        print(f"<> Winner: {self.fighter1.name if self.fighter1.is_alive() else self.fighter2.name}")
+
+    @staticmethod
+    def run_match_attacks(fighter1, fighter2):
+        fighter1.attack(fighter2)
+        fighter2.attack(fighter1)
 
 
 def main():
