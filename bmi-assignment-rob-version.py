@@ -11,7 +11,7 @@ def calculateBMI_BMR():
     userAge = int(input("Please enter your age."))
 
     while True:
-        userHeightMatches = match(r"(\d+)'(\d+)", input("Please enter your height in feet. (ex: 5'7)"))
+        userHeightMatches = match(r"\s*(\d+)\s*'\s*(\d+)\s*\"?", input("Please enter your height in feet. (ex: 5'7)"))
 
         if not userHeightMatches:
             print("Invalid input. Please enter your height in foot, inch format.")
